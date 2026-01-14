@@ -89,3 +89,9 @@ What Did Not Work Well
 •	Very small hands were sometimes missed
 •	Gloves with skin-like color reduced confidence
 •	Low-light images affected accuracy slightly
+
+
+
+
+Deployment link of this project
+https://huggingface.co/spaces/mrhackindia9/glovehandandbarehanddetection
