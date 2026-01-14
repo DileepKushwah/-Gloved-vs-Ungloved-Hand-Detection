@@ -2,7 +2,6 @@ import streamlit as st
 import numpy as np
 import os
 import json
-from ultralytics import YOLO
 
 # -------------------------
 # CONFIG
@@ -17,10 +16,11 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 os.makedirs(LOG_DIR, exist_ok=True)
 
 # -------------------------
-# LOAD MODEL
+# LOAD MODEL (LAZY LOAD)
 # -------------------------
 @st.cache_resource
 def load_model():
+    from ultralytics import YOLO   # ✅ lazy import
     return YOLO(MODEL_PATH)
 
 model = load_model()
@@ -40,7 +40,7 @@ if option == "Image":
     uploaded_file = st.file_uploader("Upload an image", type=["jpg", "png", "jpeg"])
 
     if uploaded_file is not None:
-        import cv2  # ✅ LAZY IMPORT (IMPORTANT)
+        import cv2  # ✅ lazy import
 
         file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
         img = cv2.imdecode(file_bytes, 1)
@@ -76,8 +76,7 @@ if option == "Image":
 
         st.image(annotated, channels="BGR", caption="Detection Result")
 
-        json_path = os.path.join(LOG_DIR, uploaded_file.name + ".json")
-        with open(json_path, "w") as f:
+        with open(os.path.join(LOG_DIR, uploaded_file.name + ".json"), "w") as f:
             json.dump({
                 "filename": uploaded_file.name,
                 "detections": detections
@@ -92,7 +91,7 @@ if option == "Video":
     uploaded_video = st.file_uploader("Upload a video", type=["mp4", "avi", "mov"])
 
     if uploaded_video is not None:
-        import cv2  # ✅ LAZY IMPORT (IMPORTANT)
+        import cv2  # ✅ lazy import
 
         temp_video_path = os.path.join(OUTPUT_DIR, uploaded_video.name)
 
