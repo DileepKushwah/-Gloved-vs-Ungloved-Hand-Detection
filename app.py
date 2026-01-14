@@ -1,9 +1,10 @@
 import streamlit as st
-import cv2
-import json
 import numpy as np
 import os
+import json
+import cv2
 from ultralytics import YOLO
+
 
 # -------------------------
 # CONFIG
@@ -129,3 +130,4 @@ if option == "Video":
 
         cap.release()
         st.success("Video processing completed")
+
