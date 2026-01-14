@@ -2,9 +2,7 @@ import streamlit as st
 import numpy as np
 import os
 import json
-import cv2
 from ultralytics import YOLO
-
 
 # -------------------------
 # CONFIG
@@ -42,6 +40,8 @@ if option == "Image":
     uploaded_file = st.file_uploader("Upload an image", type=["jpg", "png", "jpeg"])
 
     if uploaded_file is not None:
+        import cv2  # ✅ LAZY IMPORT (IMPORTANT)
+
         file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
         img = cv2.imdecode(file_bytes, 1)
 
@@ -76,7 +76,6 @@ if option == "Image":
 
         st.image(annotated, channels="BGR", caption="Detection Result")
 
-        # Save JSON
         json_path = os.path.join(LOG_DIR, uploaded_file.name + ".json")
         with open(json_path, "w") as f:
             json.dump({
@@ -93,6 +92,8 @@ if option == "Video":
     uploaded_video = st.file_uploader("Upload a video", type=["mp4", "avi", "mov"])
 
     if uploaded_video is not None:
+        import cv2  # ✅ LAZY IMPORT (IMPORTANT)
+
         temp_video_path = os.path.join(OUTPUT_DIR, uploaded_video.name)
 
         with open(temp_video_path, "wb") as f:
@@ -130,4 +131,3 @@ if option == "Video":
 
         cap.release()
         st.success("Video processing completed")
-
